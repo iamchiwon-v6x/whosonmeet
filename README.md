@@ -8,7 +8,7 @@
 
 ### Option 1: Install from ZIP file
 
-1. Download the `whosonmeet.zip` file
+1. Download the `whosonmeet.zip` file ([Link](https://github.com/iamchiwon-v6x/whosonmeet/releases/download/0.0.0/whosonmeet.zip))
 2. Extract the zip file to a folder on your computer
 3. Open Google Chrome and navigate to `chrome://extensions/`
 4. Enable "Developer mode" (toggle in the top right corner)
