@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import "./App.css";
 
 // 브라우저 스토리지에 사용자 목록을 저장할 때 사용하는 키
@@ -236,6 +236,27 @@ const App = () => {
   };
 
   /**
+   * 정렬된 사용자 목록을 계산합니다.
+   * 출석한 사람이 먼저, 같은 상태 내에서는 이름순으로 정렬합니다.
+   */
+  const sortedUsers = useMemo(() => {
+    return users
+      .map((user) => {
+        const matchedParticipant = participants.find((participant) => {
+          if (!participant.text) return false;
+          return normalizeName(user) === normalizeName(participant.text);
+        });
+        return { user, matchedParticipant, isPresent: !!matchedParticipant };
+      })
+      .sort((a, b) => {
+        if (a.isPresent !== b.isPresent) {
+          return a.isPresent ? -1 : 1;
+        }
+        return a.user.localeCompare(b.user);
+      });
+  }, [users, participants]);
+
+  /**
    * 팝업이 열려 있는 동안 3초 간격으로 참여자 목록을 자동 체크합니다.
    * 로딩이 완료된 후에만 interval이 시작됩니다.
    */
@@ -292,42 +313,32 @@ const App = () => {
 
       {/* 사용자 목록 섹션 */}
       <div className="user-list">
-        {users.length === 0 ? (
+        {sortedUsers.length === 0 ? (
           <p className="empty-message">No users added yet</p>
         ) : (
-          users.map((user) => {
-            // 등록된 사용자와 현재 참여자 목록에서 일치하는 항목 찾기
-            const matchedParticipant = participants.find((participant) => {
-              if (!participant.text) return false;
-              // 이름을 정규화하여 대소문자/공백 등의 차이를 무시하고 비교
-              return normalizeName(user) === normalizeName(participant.text);
-            });
-            const isPresent = !!matchedParticipant; // 참여 여부
-
-            return (
-              <div key={user} className="user-item">
-                <div className="user-info">
-                  {/* 참여 중이고 프로필 이미지가 있으면 표시 */}
-                  {isPresent && matchedParticipant?.imgSrc && (
-                    <img
-                      src={matchedParticipant.imgSrc}
-                      alt={user}
-                      className="user-thumbnail"
-                    />
-                  )}
-                  <span className="user-name">{user}</span>
-                  {/* 참여 중인 경우 출석 배지 표시 */}
-                  {isPresent && <span className="attendance-badge">출석</span>}
-                </div>
-                <button
-                  onClick={() => handleDeleteUser(user)}
-                  className="delete-button"
-                >
-                  Delete
-                </button>
+          sortedUsers.map(({ user, matchedParticipant, isPresent }) => (
+            <div key={user} className="user-item">
+              <div className="user-info">
+                {/* 참여 중이고 프로필 이미지가 있으면 표시 */}
+                {isPresent && matchedParticipant?.imgSrc && (
+                  <img
+                    src={matchedParticipant.imgSrc}
+                    alt={user}
+                    className="user-thumbnail"
+                  />
+                )}
+                <span className="user-name">{user}</span>
+                {/* 참여 중인 경우 출석 배지 표시 */}
+                {isPresent && <span className="attendance-badge">출석</span>}
               </div>
-            );
-          })
+              <button
+                onClick={() => handleDeleteUser(user)}
+                className="delete-button"
+              >
+                Delete
+              </button>
+            </div>
+          ))
         )}
       </div>
     </div>
