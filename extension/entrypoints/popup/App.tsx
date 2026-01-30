@@ -9,7 +9,7 @@ const STORAGE_KEY = "userList";
  */
 interface Participant {
   imgSrc?: string; // 참여자 프로필 이미지 URL
-  text?: string;   // 참여자 이름
+  text?: string; // 참여자 이름
 }
 
 /**
@@ -25,9 +25,9 @@ interface Participant {
  */
 const normalizeName = (name: string): string => {
   return name
-    .toLowerCase()            // 소문자로 변환
-    .replace(/\s/g, "")       // 모든 공백 제거
-    .replace(/\./g, "")       // 모든 마침표 제거
+    .toLowerCase() // 소문자로 변환
+    .replace(/\s/g, "") // 모든 공백 제거
+    .replace(/\./g, "") // 모든 마침표 제거
     .replace(/\([^)]*\)/g, ""); // 괄호와 괄호 안 내용 제거
 };
 
