@@ -1,7 +1,7 @@
 <div align="center">
   <img src="extension/public/icon/96.png" alt="Who's on meet? Icon" width="64" height="64">
   <h1>Who's on meet?</h1>
-  <p style="text-wrap: balance;">A Chrome extension that helps you track attendance in Google Meet by comparing registered user names with the current participants list.</p>
+  <p style="text-wrap: balance;">A Chrome extension that helps you track attendance in Google Meet <br/> by comparing registered user names with the current participants list.</p>
 </div>
 
 ## Installation
